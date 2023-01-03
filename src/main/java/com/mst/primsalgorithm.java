@@ -33,9 +33,6 @@ public class primsalgorithm {
         System.out.println("Alle Knoten: ");
         System.out.println(myGraph.getVertices());
 
-        System.out.println("----------");
-        System.out.println("Startknoten: ");
-
         // startknoten: knoten mit der kleinsten id finden
         boolean startFound = false;
         int i = 0;
@@ -49,8 +46,15 @@ public class primsalgorithm {
             }
             i++;
         }
+        System.out.println("----------");
+        System.out.println("Startknoten: ");
         // the vertex for which you want to find the minimum weight edge
         System.out.println(startingPoint);
+
+        // loop through graph until all vertices are indexed
+        for (int j = 0; j < myGraph.getNumberVertices(); j++) {
+            System.out.println("moin: " + j);
+        }
 
         // für Startknoten alle Nachbarn finden
         // für alle Edges zu den Nachbarn die Edge mit den
@@ -61,10 +65,15 @@ public class primsalgorithm {
             System.out.println(neighbor);
         }
 
+        // minimale Kante finden
         System.out.println("----------");
         System.out.println("minWeightEdge:");
         System.out.println(findMinWeightEdge(myGraph.getVertex(startingPoint), myGraph));
-        
+
+        // Knoten vom vorherigen Knoten mit minimaler Kante
+        System.out.println("----------");
+        System.out.println("nächster Knoten:");
+        System.out.println(findMinWeightEdge(myGraph.getVertex(startingPoint), myGraph).getVertexA());
     }
 
     // Methode um Kante mit niedrigstem Gewicht finden
