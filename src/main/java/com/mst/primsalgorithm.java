@@ -39,6 +39,7 @@ public class primsalgorithm {
         // startknoten: knoten mit der kleinsten id finden
         boolean startFound = false;
         int i = 0;
+        // the vertex for which you want to find the minimum weight edge
         int startingPoint = 0;
         while (!startFound) {
             Vertex start = myGraph.getVertex(i);
@@ -48,46 +49,36 @@ public class primsalgorithm {
             }
             i++;
         }
+        // the vertex for which you want to find the minimum weight edge
         System.out.println(startingPoint);
 
         // für Startknoten alle Nachbarn finden
         // für alle Edges zu den Nachbarn die Edge mit den
         // niedrigsten Kosten finden
         System.out.println("----------");
-        
-        // the vertex for which you want to find the minimum weight edge
-        // Vertex currentVertex = 
-        // initialize the minimum weight to the maximum possible value
-        int minWeight = Integer.MAX_VALUE;
-        // initialize the minimum weight edge to null
-        Edge<Vertex> minWeightEdge = null;  
-
         System.out.println("Alle Nachbarn:");
         for (Vertex neighbor : myGraph.getNeighbours(startingPoint)) {
             System.out.println(neighbor);
-            System.out.println("Incident edges:");
-            System.out.println(myGraph.getIncidentEdges(startingPoint));
         }
 
-        for (Edge<Vertex> neighborE : myGraph.getIncidentEdges(startingPoint)) {
-            System.out.println(
-                "For edge from " +
-                neighborE.getVertexA() + " to " +
-                neighborE.getVertexB() + " get weight: ");
-            System.out.println(neighborE.getWeight());
-
-            if (neighborE.getWeight() < minWeight) {
-                minWeight = neighborE.getWeight();
-                minWeightEdge = neighborE;
-            }
-
-            System.out.println("Final lowest weight is: ");
-            System.out.println(minWeight);
-            System.out.println("Respective edge is: ");
-            System.out.println(minWeightEdge);
-
-        }
+        System.out.println("----------");
+        System.out.println("minWeightEdge:");
+        System.out.println(findMinWeightEdge(myGraph.getVertex(startingPoint), myGraph));
         
+    }
+
+    // Methode um Kante mit niedrigstem Gewicht finden
+    public Edge<Vertex> findMinWeightEdge(Vertex vertex, Graph<Vertex, Edge<Vertex>> graph) {
+        int minWeight = Integer.MAX_VALUE;
+        Edge<Vertex> minWeightEdge = null;
+    
+        for (Edge<Vertex> edge : graph.getIncidentEdges(vertex)) {
+            if (edge.getWeight() < minWeight) {
+                minWeight = edge.getWeight();
+                minWeightEdge = edge;
+            }
+        }
+        return minWeightEdge;
     }
 
     public static void getTotalWeight() {
