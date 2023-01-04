@@ -9,7 +9,7 @@ public final class App {
     public static void main(String[] args) {
 
         primsalgorithm newObj = new primsalgorithm();
-        newObj.solve();
-
+        Graph<Vertex, Edge<Vertex>> myGraph = newObj.createGraph();
+        newObj.solve(myGraph);
     }
 }

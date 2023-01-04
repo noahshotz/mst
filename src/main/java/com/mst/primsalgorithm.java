@@ -4,9 +4,14 @@ import graph.*;
 
 public class primsalgorithm {
 
-    public void solve() {
+    // read graph from txt-file
+    public static void readGraph() {
 
-        // graphen nehmen
+    }
+
+    // create sample graph to solve
+    public Graph<Vertex, Edge<Vertex>> createGraph() {
+
         Graph<Vertex, Edge<Vertex>> myGraph = new Graph<>(false);
         Vertex a = new Vertex(3, "A");
         Vertex b = new Vertex(1, "B");
@@ -23,6 +28,11 @@ public class primsalgorithm {
         myGraph.addEdge(ab);
         myGraph.addEdge(ac);
         myGraph.addEdge(bc);
+
+        return myGraph;
+    }
+
+    public void solve(Graph<Vertex, Edge<Vertex>> myGraph) {
 
         System.out.println("----------");
         System.out.println("Current graph: ");
@@ -51,9 +61,10 @@ public class primsalgorithm {
         // the vertex for which you want to find the minimum weight edge
         System.out.println(startingPoint);
 
+
         // loop through graph until all vertices are indexed
         for (int j = 0; j < myGraph.getNumberVertices(); j++) {
-            System.out.println("moin: " + j);
+
         }
 
         // für Startknoten alle Nachbarn finden
