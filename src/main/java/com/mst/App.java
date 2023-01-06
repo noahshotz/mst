@@ -8,8 +8,11 @@ import graph.*;
 public final class App {
     public static void main(String[] args) {
 
+        // generate new graph object
         primsalgorithm newObj = new primsalgorithm();
-        Graph<Vertex, Edge<Vertex>> myGraph = newObj.createGraph();
-        newObj.solve(myGraph);
+        // generate sample graph to solve
+        Graph<Vertex, Edge<Vertex>> newGraph = newObj.createGraph();
+        // run solve method
+        newObj.solve(newGraph);
     }
 }
