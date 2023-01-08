@@ -14,29 +14,13 @@ public class primsalgorithm {
         // 4. Füge alle ausgehenden Kanten des neu hinzugefügten Knotens zu der Priority Queue hinzu, falls sie nicht bereits enthalten sind.
         // 5. Wiederhole Schritt 3 und 4, bis alle Knoten im MST enthalten sind.
 
-
-        // Startknoten finden
+        // 1. : Startknoten finden
         int startingPoint = findInitialVertex(myGraph);
-
         // print the vertex for which you want to find the minimum weight edge to console
         System.out.println("----------");
         System.out.println("Startknoten: " + startingPoint);
 
-        // loop through graph until all vertices are indexed
-        for (int j = 0; j < myGraph.getNumberVertices(); j++) {
-
-        }
-
-        // für Startknoten alle Nachbarn finden
-        // für alle Edges zu den Nachbarn die Edge mit den
-        // niedrigsten Kosten finden
-        System.out.println("----------");
-        System.out.println("Alle Nachbarn:");
-        for (Vertex neighbor : myGraph.getNeighbours(startingPoint)) {
-            System.out.println(neighbor);
-        }
-
-        // minimale Kante finden
+        // 2. & 3. : minimale Kante finden
         System.out.println("----------");
         System.out.println("minWeightEdge:");
         System.out.println(findMinWeightEdge(myGraph.getVertex(startingPoint), myGraph));
@@ -58,34 +42,16 @@ public class primsalgorithm {
     }
 
     // read graph from txt-file
-    public static void readGraph() {
-    }
+    public Graph<Vertex, Edge<Vertex>> readGraph(String dat) {
 
-    // create sample graph to solve
-    public Graph<Vertex, Edge<Vertex>> createGraph() {
+        Graph<Vertex, Edge<Vertex>> myGraph = GraphRead.FileToGraph(
+            "src/main/java/com/mst/BspMST/bsp_mst_1.txt", 
+            false, 
+            false,
+            true
+        );
 
-        // new graph object
-        Graph<Vertex, Edge<Vertex>> myGraph = new Graph<>(false);
-
-        // create new vertex objects with ID and name
-        Vertex a = new Vertex(3, "A");
-        Vertex b = new Vertex(1, "B");
-        Vertex c = new Vertex(2, "C");
-
-        // add vertices to graph
-        myGraph.addVertex(a);
-        myGraph.addVertex(b);
-        myGraph.addVertex(c);
-
-        // create new edge object between vertices with specific weights
-        Edge<Vertex> ab = new Edge<>(a, b, 10);
-        Edge<Vertex> ac = new Edge<>(a, c, 20);
-        Edge<Vertex> bc = new Edge<>(b, c, 30);
-
-        // add edges to graph
-        myGraph.addEdge(ab);
-        myGraph.addEdge(ac);
-        myGraph.addEdge(bc);
+        System.out.println(myGraph);
 
         return myGraph;
     }
@@ -107,6 +73,12 @@ public class primsalgorithm {
             }
             i++;
         }
+
+        Graph<Vertex, Edge<Vertex>> myMST = new Graph<>(false);
+        Vertex start = myGraph.getVertex(i);
+        myMST.addVertex(start);
+        System.out.println("New MST:" + myMST);
+
         return startingPoint;
     }
 
@@ -114,6 +86,7 @@ public class primsalgorithm {
     public static Edge<Vertex> findMinWeightEdge(Vertex vertex, Graph<Vertex, Edge<Vertex>> graph) {
         // Erstelle eine PriorityQueue mit Initialkapazität 10 und
         // einem Comparator, der die Kanten nach Gewicht sortiert
+        // TODO: Initialkapazität auf Zahl ausgehender Kanten des Knotens festlegen
         PriorityQueue<Edge<Vertex>> queue = new PriorityQueue<>(10, (a, b) -> a.getWeight() - b.getWeight());
     
         // Füge alle ausgehenden Kanten des Knotens zur PriorityQueue hinzu
@@ -126,7 +99,7 @@ public class primsalgorithm {
 
     // get total weight of new graph
     public static void getTotalWeight() {
-
+        // Alle Kantengewichte addieren
     }
 
 }
