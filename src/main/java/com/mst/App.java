@@ -14,10 +14,10 @@ public final class App {
 
          // generate new graph object
          primsalgorithm newObj = new primsalgorithm();
-         // generate sample graph to solve
-         Graph<Vertex, Edge<Vertex>> newGraph = newObj.readGraph("./bsp_mst_1.txt");
+         // create graph from txt-file
+         Graph<Vertex, Edge<Vertex>> newGraph = newObj.readGraph("src/main/java/com/mst/BspMST/bsp_mst_1.txt");
          // run solve method
-         newObj.solve(newGraph);
+         newObj.solveToMST(newGraph);
         
     }
 }
