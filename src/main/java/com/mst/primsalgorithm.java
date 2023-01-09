@@ -52,10 +52,10 @@ public class primsalgorithm {
             Edge<Vertex> minWeightEdge = findMinWeightEdge(minVertex, myGraph, myMST);
             if (!vertexInGraph(myMST, minWeightEdge.getVertexB())) {
                 myMST.addVertex(minWeightEdge.getVertexB());
-                
+
             }
             myMST.addEdge(minWeightEdge);
-            
+
             // Vertex aus der Liste der verbleibenden Knoten entfernen
             remainingVertices.remove(minVertex);
         }
@@ -123,10 +123,9 @@ public class primsalgorithm {
     }
 
     public Edge<Vertex> findMinWeightEdge(
-        Vertex vertex,
-        Graph<Vertex, Edge<Vertex>> myGraph,
-        Graph<Vertex, Edge<Vertex>> myMST
-    ) {
+            Vertex vertex,
+            Graph<Vertex, Edge<Vertex>> myGraph,
+            Graph<Vertex, Edge<Vertex>> myMST) {
 
         // Prioritätswarteschlange, um Kanten nach ihrem Gewicht zu sortieren
         PriorityQueue<Edge<Vertex>> queue = new PriorityQueue<>();
@@ -147,7 +146,8 @@ public class primsalgorithm {
             }
             // Wenn der Zielknoten schon im MST enthalten ist, entferne die Kante aus der
             // Warteschlange und betrachte die nächste
-            minWeightEdge = queue.poll();
+            queue.poll();
+            minWeightEdge = queue.peek();
             return minWeightEdge;
         }
 
