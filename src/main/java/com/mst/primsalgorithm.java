@@ -48,9 +48,8 @@ public class primsalgorithm {
             myMST.addEdge(edge);
         }
 
-        // MST und Gesamtgewicht in der Konsole ausgeben
+        // MST in der Konsole ausgeben
         System.out.println(myMST);
-        System.out.println("Gesamtgewicht: " + getTotalWeight(myMST));
 
         // 'myMST' vom Typ Graph<Vertex, Edge<Vertex>> zurückgeben
         return myMST;
@@ -84,12 +83,14 @@ public class primsalgorithm {
         }
         i = 0; // Reset i
 
+        // Startknoten zurückgeben
         Vertex start = myGraph.getVertex(startingPoint);
         return start;
     }
 
     // Gesamtgewicht des MST berechnen
-    public static int getTotalWeight(Graph<Vertex, Edge<Vertex>> myMST) {
+    public int getTotalWeight(Graph<Vertex, Edge<Vertex>> myMST) {
+
         // Gesamtsumme initialisieren
         int totalWeight = 0;
 
@@ -101,6 +102,10 @@ public class primsalgorithm {
             // Kantengewicht hinzufügen
             totalWeight += edge.getWeight();
         }
+
+        // Gesamtgewicht in der Konsole ausgeben
+        System.out.println("Gesamtgewicht: " + totalWeight);
+        // totalweight vom Typ int zurückgeben
         return totalWeight;
     }
 }
