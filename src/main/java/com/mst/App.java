@@ -10,7 +10,7 @@ public final class App {
          // generate new graph object
          primsalgorithm newObj = new primsalgorithm();
          // create graph from txt-file
-         Graph<Vertex, Edge<Vertex>> newGraph = newObj.readGraph("src/main/java/com/mst/BspMST/bsp_mst_1.txt");
+         Graph<Vertex, Edge<Vertex>> newGraph = newObj.readGraph("src/main/java/com/mst/BspMST/bsp_mst_3.txt");
          // run solve method
          newObj.solveToMST(newGraph);        
     }

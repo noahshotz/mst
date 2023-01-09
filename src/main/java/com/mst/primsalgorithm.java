@@ -2,6 +2,7 @@ package com.mst;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.PriorityQueue;
 import graph.*;
 
@@ -10,23 +11,39 @@ public class primsalgorithm {
     // solve graph using prims algorithm
     public void solveToMST(Graph<Vertex, Edge<Vertex>> myGraph) {
 
-        // Alle Knoten in einer Collection speichern
-        Collection<Vertex> allVertices = myGraph.getVertices();
-        // Casten der Collection zu einer List
-        List<Vertex> vertexList = (List<Vertex>) allVertices;
-
         // MST initialisieren
         Graph<Vertex, Edge<Vertex>> myMST = new Graph<>(false);
 
-        // Startknoten finden
-        Vertex startingPoint = findInitialVertex(myGraph, myMST);
-        findMinWeightEdge(startingPoint, myGraph, myMST);
+        Vertex initialVertex = findInitialVertex(myGraph, myMST);
+        Edge<Vertex> nextEdge = findMinWeightEdge(initialVertex, myGraph, myMST);
+        myMST.addVertex(initialVertex);
+        myMST.addVertex(nextEdge.getVertexB());
+        myMST.addEdge(nextEdge);
 
+        // Alle Knoten in einer Collection speichern & in Liste casten
+        Collection<Vertex> allVertices = myGraph.getVertices();
+        List<Vertex> vertexList = (List<Vertex>) allVertices;
+
+        List<Vertex> remainingVertices = new ArrayList<>();
         for (Vertex vertex : vertexList) {
             if (!vertexInGraph(myMST, vertex)) {
-                System.out.println(vertex);
-                myMST.addVertex(vertex);
-                myMST.addEdge(findMinWeightEdge(vertex, myGraph, myMST));
+                remainingVertices.add(vertex);
+            }
+        }
+
+        // Für jeden Knoten, der noch nicht im MST enthalten ist, suche nach der Kante
+        // mit dem niedrigsten Gewicht
+        // und füge sie dem MST hinzu
+        for (Vertex vertex : remainingVertices) {
+            Edge<Vertex> minWeightEdge = findMinWeightEdge(vertex, myGraph, myMST);
+            if (minWeightEdge == null) {
+                // Es gibt keine Kante, die von diesem Knoten ausgeht und deren Zielknoten noch
+                // nicht im MST enthalten ist
+                continue;
+            }
+            myMST.addVertex(minWeightEdge.getVertexB());
+            if (!edgeInGraph(myMST, minWeightEdge)) {
+                myMST.addEdge(minWeightEdge);
             }
         }
 
@@ -35,43 +52,26 @@ public class primsalgorithm {
         System.out.print(myMST);
 
         System.out.println("---------");
+        System.out.println("myMST alle Kanten:");
+        System.out.println(myMST.getEdges());
+
+        System.out.println("---------");
         System.out.println("Gesamtkantengewicht:");
         System.out.println(getTotalWeight(myMST));
     }
 
-    public boolean vertexInGraph(
-            Graph<Vertex, Edge<Vertex>> myGraph,
-            Vertex vertex
-    ) {
-        Collection<Vertex> vertices = myGraph.getVertices();
-        for (Vertex v : vertices) {
-            if (v.equals(vertex)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     // read graph from txt-file
     public Graph<Vertex, Edge<Vertex>> readGraph(String dat) {
-        Graph<Vertex, Edge<Vertex>> myGraph = GraphRead.FileToGraph(
-                dat,
-                false,
-                false,
-                true);
+        Graph<Vertex, Edge<Vertex>> myGraph = GraphRead.FileToGraph(dat, false, false, true);
         System.out.println(myGraph);
         return myGraph;
     }
 
     // Methode um Startknoten zu finden
-    public static Vertex findInitialVertex(
-            Graph<Vertex, Edge<Vertex>> myGraph,
-            Graph<Vertex, Edge<Vertex>> myMST) {
-        // find initial vertex to start from
-        // initial vertex is defined by lowest ID
+    public Vertex findInitialVertex(Graph<Vertex, Edge<Vertex>> myGraph, Graph<Vertex, Edge<Vertex>> myMST) {
+        // find initial vertex to start from by lowest ID
         boolean startFound = false;
         int i = 0;
-        // the vertex for which you want to find the minimum weight edge
         int startingPoint = 0;
         while (!startFound) {
             Vertex start = myGraph.getVertex(i);
@@ -81,52 +81,63 @@ public class primsalgorithm {
             }
             i++;
         }
-        // Reset i
-        i = 0;
+        i = 0; // Reset i
 
         Vertex start = myGraph.getVertex(startingPoint);
         myMST.addVertex(start);
-        System.out.println("New MST:" + myMST);
         return start;
     }
 
-    // Methode um Kante mit niedrigstem Gewicht finden
-    public static Edge<Vertex> findMinWeightEdge(
-            Vertex vertex,
-            Graph<Vertex, Edge<Vertex>> myGraph,
-            Graph<Vertex, Edge<Vertex>> myMST) {
-        // Erstelle eine PriorityQueue mit der Anzahl der ausgehenden Kanten des Knotens
-        // als Initialkapazität und einem Comparator, der die Kanten nach Gewicht
-        // sortiert
-        PriorityQueue<Edge<Vertex>> queue = new PriorityQueue<>(
-                myGraph.getIncidentEdges(vertex).size(),
-                (a, b) -> a.getWeight() - b.getWeight());
-
-        // Füge alle ausgehenden Kanten des Knotens zur PriorityQueue hinzu
-        queue.addAll(myGraph.getIncidentEdges(vertex));
-
-        // Die Kante mit dem niedrigsten Gewicht ist die erste in der Queue
-        Edge<Vertex> minWeightEdge = queue.poll();
-
-        System.out.println(minWeightEdge);
-
-        // Endknoten der Kante dem MST hinzufügen, falls noch nicht enthalten
-        addNextVertex(myMST, minWeightEdge);
-
-        return minWeightEdge;
+    // check if vertex in graph
+    public boolean vertexInGraph(Graph<Vertex, Edge<Vertex>> myGraph, Vertex vertex) {
+        Collection<Vertex> vertices = myGraph.getVertices();
+        for (Vertex v : vertices) {
+            if (v.equals(vertex)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public static void addNextVertex(
-            Graph<Vertex, Edge<Vertex>> myMST,
-            Edge<Vertex> minWeightEdge) {
-        // minWeight-Kante und entsprechenden Endknoten hinzufügen
-        Vertex newVertex = minWeightEdge.getVertexB();
-        myMST.addVertex(newVertex);
+    // check if edge in graph
+    public boolean edgeInGraph(Graph<Vertex, Edge<Vertex>> myGraph, Edge<Vertex> edge) {
+        Collection<Edge<Vertex>> edges = myGraph.getEdges();
+        for (Edge<Vertex> e : edges) {
+            if (e.equals(edge)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Methode um Kante mit niedrigstem Gewicht finden
+    public Edge<Vertex> findMinWeightEdge(Vertex vertex, Graph<Vertex, Edge<Vertex>> myGraph,
+            Graph<Vertex, Edge<Vertex>> myMST) {
+
+        // Kanten temporär speichern
+        List<Edge<Vertex>> edges = (List<Edge<Vertex>>) myGraph.getIncidentEdges(vertex);
+        // PQ mit Initialkapazität = Kantenzahl
+        PriorityQueue<Edge<Vertex>> queue = new PriorityQueue<>(
+                edges.size(),
+                (a, b) -> a.getWeight() - b.getWeight());
+
+        // Alle Kanten hinzufügen, deren Zielknoten noch nicht im MST enthalten sind
+        for (Edge<Vertex> edge : edges) {
+            if (!vertexInGraph(myMST, edge.getVertexB())) {
+                queue.add(edge);
+            }
+        }
+
+        Edge<Vertex> minWeightEdge = null;
+        while (!queue.isEmpty()) {
+            minWeightEdge = queue.poll();
+            break;
+        }
+        return minWeightEdge;
     }
 
     // get total weight of new graph
     public static int getTotalWeight(Graph<Vertex, Edge<Vertex>> myMST) {
-        // Alle Kantengewichte addieren
         // Gesamtsumme initialisieren
         int totalWeight = 0;
 
