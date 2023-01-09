@@ -7,11 +7,11 @@ import graph.*;
 public final class App {
     public static void main(String[] args) {
 
-         // generate new graph object
-         primsalgorithm newObj = new primsalgorithm();
-         // create graph from txt-file
-         Graph<Vertex, Edge<Vertex>> newGraph = newObj.readGraph("src/main/java/com/mst/BspMST/bsp_mst_2.txt");
-         // run solve method
-         newObj.solveToMST(newGraph);        
+         // Neuen Graphen aus txt-Datei erstellen
+         primsalgorithm graph = new primsalgorithm();
+         Graph<Vertex, Edge<Vertex>> myGraph = graph.readGraph("src/main/java/com/mst/BspMST/bsp_mst_2.txt");
+
+         // MST aus Graphen erstellen
+         graph.solveToMST(myGraph);        
     }
 }
